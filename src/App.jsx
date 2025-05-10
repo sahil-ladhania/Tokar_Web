@@ -12,22 +12,30 @@ import LobbyPage from "./pages/LobbyPage.jsx";
 import GamePage from "./pages/GamePage.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
 import NotFoundPage from "./pages/NotFoundPage.jsx";
+import Layout from './components/Layout.jsx';
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<HomePage/>} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/features" element={<FeaturesPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-        <Route path="/change-password" element={<ChangePasswordPage />} />
-        <Route path="/matchmaking" element={<MatchMakingPage />} />
-        <Route path="/lobby/:roomCode" element={<LobbyPage />} />
+        {/* Routes using the Layout (with Navbar + Footer) */}
+        <Route element={<Layout />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/features" element={<FeaturesPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/change-password" element={<ChangePasswordPage />} />
+          <Route path="/matchmaking" element={<MatchMakingPage />} />
+          <Route path="/lobby/:roomCode" element={<LobbyPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+        </Route>
+
+        {/* GamePage renders without Navbar/Footer (full-screen board) */}
         <Route path="/game/:roomCode" element={<GamePage />} />
-        <Route path="/profile" element={<ProfilePage />} />
+
+        {/* 404 */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Router>
