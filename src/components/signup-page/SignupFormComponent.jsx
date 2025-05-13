@@ -1,85 +1,70 @@
-// src/components/signup/SignupFormComponent.jsx
-import React from 'react'
-import { motion } from 'framer-motion'
-import { Button } from '@/components/ui/button'
+import React from 'react';
+import { signupSchema } from '../../utils/DataValidation.js';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { motion } from 'framer-motion';
+import { Button } from '@/components/ui/button';
+import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { authFail, authStart } from '../../redux/slices/userSlice.js';
+import { signup } from '../../services/authServices.js';
+import { FormInput } from '../common/FormInputComponent.jsx';
+import { useNavigate } from 'react-router-dom';
 
 const SignupFormComponent = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const {register , handleSubmit , formState: {errors} , reset} = useForm({resolver: zodResolver(signupSchema)});
+
+  const onSubmit = async(formData) => {
+    try {
+      dispatch(authStart());
+      const response = await signup({formData});
+      setTimeout(() => {
+        navigate('/login');
+      }, 1000);
+      reset();
+    }
+    catch (error) {
+      console.log("Signup Failed : " , error.message);
+      dispatch(authFail(error.message));
+    }
+  }
+
   return (
     <motion.form
+      onSubmit={handleSubmit(onSubmit)}
       className="bg-slate-800 p-8 rounded-lg shadow-xl space-y-6"
       initial={{ opacity: 0, x: 50 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.8, delay: 0.2 }}
     >
-      {/* Name Fields */}
+      {/* 🔤 First & Last Name */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-          <label htmlFor="firstName" className="block mb-1 text-white">
-            First Name
-          </label>
-          <input
-            id="firstName"
-            type="text"
-            placeholder="First Name"
-            className="w-full px-4 py-2 rounded-md bg-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-          />
-        </div>
-        <div>
-          <label htmlFor="lastName" className="block mb-1 text-white">
-            Last Name
-          </label>
-          <input
-            id="lastName"
-            type="text"
-            placeholder="Last Name"
-            className="w-full px-4 py-2 rounded-md bg-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-          />
-        </div>
+        <FormInput label="First Name" id="firstName" register={register} error={errors.firstName} />
+        <FormInput label="Last Name" id="lastName" register={register} error={errors.lastName} />
       </div>
 
-      {/* Email & Phone */}
-      <div>
-        <label htmlFor="email" className="block mb-1 text-white">
-          Email
-        </label>
-        <input
-          id="email"
-          type="email"
-          placeholder="you@example.com"
-          className="w-full px-4 py-2 rounded-md bg-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-        />
-      </div>
-      <div>
-        <label htmlFor="phone" className="block mb-1 text-white">
-          Phone
-        </label>
-        <input
-          id="phone"
-          type="tel"
-          placeholder="+1234567890"
-          className="w-full px-4 py-2 rounded-md bg-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-        />
-      </div>
+      {/* 📧 Email */}
+      <FormInput label="Email" id="email" type="email" register={register} error={errors.email} />
 
-      {/* Password */}
-      <div>
-        <label htmlFor="password" className="block mb-1 text-white">
-          Password
-        </label>
-        <input
-          id="password"
-          type="password"
-          placeholder="••••••••"
-          className="w-full px-4 py-2 rounded-md bg-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-        />
-      </div>
+      {/* 📞 Phone */}
+      <FormInput label="Phone" id="phone" register={register} error={errors.phone} />
 
-      {/* Submit */}
-      <Button type="submit" className="w-full">
-        Sign Up
-      </Button>
+      {/* 🔒 Password */}
+      <FormInput label="Password" id="password" type="password" register={register} error={errors.password} />
+
+      {/* 🚀 Submit */}
+      <Button type="submit" className="w-full">Sign Up</Button>
+
+      {/* 🔗 Links */}
+      <div className="pt-4 border-t border-slate-600 text-center space-y-2 text-sm text-slate-300">
+        <p>Already have an account? <a href="/login" className="text-emerald-400 hover:underline">Login</a></p>
+        <p><a href="/forgot-password" className="text-emerald-400 hover:underline">Forgot Password?</a></p>
+        <p><a href="/change-password" className="text-emerald-400 hover:underline">Change Password</a></p>
+      </div>
     </motion.form>
-  )
-}
+  );
+};
 
-export default SignupFormComponent
+export default SignupFormComponent;
