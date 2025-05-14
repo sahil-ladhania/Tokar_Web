@@ -1,56 +1,54 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
+import { FormInput } from '../common/FormInputComponent';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { changePasswordSchema } from '../../utils/DataValidation';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { authFail, authStart } from '../../redux/slices/userSlice';
+import { changePassword } from '../../services/authServices';
 
 const ChangePasswordFormComponent = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const {register , handleSubmit , formState: {errors} , reset} = useForm({resolver: zodResolver(changePasswordSchema)});
+
+  const onSubmit = async(formData) => {
+    try {
+      dispatch(authStart());
+
+      const response = await changePassword({formData});
+      console.log(response);
+
+      setTimeout(() => {
+        navigate('/login');
+      }, 1000);
+      reset();
+    }
+    catch (error) {
+      console.log("Error Changing Password : " , error.message);
+      dispatch(authFail(error.message));
+    }
+  }
+
   return (
     <motion.form
+      onSubmit={handleSubmit(onSubmit)}
       className="bg-slate-800 p-8 rounded-lg shadow-xl space-y-6"
       initial={{ opacity: 0, x: 50 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.8, delay: 0.2 }}
     >
       {/* Current Password */}
-      <div>
-        <label htmlFor="currentPassword" className="block mb-1 text-white">
-          Current Password
-        </label>
-        <input
-          id="currentPassword"
-          type="password"
-          placeholder="••••••••"
-          required
-          className="w-full px-4 py-2 rounded-md bg-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-        />
-      </div>
+      <FormInput label="Current Password" id="currentPassword" type="password" register={register} error={errors.currentPassword} />
 
       {/* New Password */}
-      <div>
-        <label htmlFor="newPassword" className="block mb-1 text-white">
-          New Password
-        </label>
-        <input
-          id="newPassword"
-          type="password"
-          placeholder="••••••••"
-          required
-          className="w-full px-4 py-2 rounded-md bg-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-        />
-      </div>
+      <FormInput label="New Password" id="newPassword" type="password" register={register} error={errors.newPassword} />
 
       {/* Confirm Password */}
-      <div>
-        <label htmlFor="confirmPassword" className="block mb-1 text-white">
-          Confirm Password
-        </label>
-        <input
-          id="confirmPassword"
-          type="password"
-          placeholder="••••••••"
-          required
-          className="w-full px-4 py-2 rounded-md bg-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-        />
-      </div>
+      <FormInput label="Confirm Password" id="confirmPassword" type="password" register={register} error={errors.confirmPassword} />
 
       {/* Submit */}
       <Button type="submit" className="w-full">
