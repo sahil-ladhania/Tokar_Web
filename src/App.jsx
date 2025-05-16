@@ -16,8 +16,19 @@ import Layout from './components/Layout.jsx';
 import ResetPasswordPage from './pages/ResetPasswordPage.jsx';
 import PlayComputerPage from './pages/PlayComputerPage.jsx';
 import PlayOnlinePage from './pages/PlayOnlinePage.jsx';
+import { useEffect } from 'react';
+import socket from './socket.js';
 
 function App() {
+
+  // Socket Connection
+  useEffect(() => {
+    socket.on("connect" , () => {
+      console.log("Socket Connected ...");
+      console.log(socket.id);
+    })
+  }, []);
+  
   return (
     <Router>
       <Routes>
