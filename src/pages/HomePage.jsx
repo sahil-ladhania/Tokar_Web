@@ -11,13 +11,13 @@ const HomePage = () => {
   const navigate = useNavigate()
 
   const handlePlayVsComputer = () => {
-    navigate('/matchmaking?mode=computer')
+    navigate('/play/computer');
   }
   const handlePlayOnline = () => {
-    navigate('/matchmaking?mode=online')
+    navigate('/play/online');
   }
   const handlePlayWithFriends = () => {
-    navigate('/matchmaking?mode=friends')
+    navigate('/matchmaking')
   }
 
   return (

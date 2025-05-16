@@ -14,6 +14,8 @@ import ProfilePage from "./pages/ProfilePage.jsx";
 import NotFoundPage from "./pages/NotFoundPage.jsx";
 import Layout from './components/Layout.jsx';
 import ResetPasswordPage from './pages/ResetPasswordPage.jsx';
+import PlayComputerPage from './pages/PlayComputerPage.jsx';
+import PlayOnlinePage from './pages/PlayOnlinePage.jsx';
 
 function App() {
   return (
@@ -29,6 +31,8 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route path="/change-password" element={<ChangePasswordPage />} />
+          <Route path="/play/computer" element={<PlayComputerPage />} />
+          <Route path="/play/online" element={<PlayOnlinePage />} />
           <Route path="/matchmaking" element={<MatchMakingPage />} />
           <Route path="/lobby/:roomCode" element={<LobbyPage />} />
           <Route path="/profile" element={<ProfilePage />} />

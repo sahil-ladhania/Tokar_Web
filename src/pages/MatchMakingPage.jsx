@@ -1,46 +1,30 @@
-// src/pages/MatchMakingPage.jsx
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Users, Globe } from 'lucide-react'
-import OptionCardComponent from '../components/match-making-page/OptionCardComponent'
+import { motion } from 'framer-motion'
 import PrivateRoomFormComponent from '../components/match-making-page/PrivateRoomFormComponent'
 
 const MatchMakingPage = () => {
-  const navigate = useNavigate()
-
-  const handleQuickPlay = () => navigate('/game/public')
-  const handleCreateRoom = () => console.log('create room logic')
-  const handleJoinRoom = (code) => navigate(`/lobby/${code}`)
-
   return (
-    <div className="px-4 py-12 max-w-5xl mx-auto">
-      <h2 className="text-3xl font-bold text-white mb-8 text-center">
-        Choose Your Match
-      </h2>
+    <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
+      <motion.div
+        className="bg-slate-800 rounded-2xl shadow-xl w-full max-w-lg p-8"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <h2 className="text-4xl font-bold text-white mb-6 text-center">
+          Choose Your Match
+        </h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Quick Play */}
-        <OptionCardComponent
-          Icon={Users}
-          label="Quick Play (Public Match)"
-          onClick={handleQuickPlay}
-        />
-
-        {/* Private Room */}
-        <PrivateRoomFormComponent
-          onCreate={handleCreateRoom}
-          onJoin={handleJoinRoom}
-        />
-      </div>
-
-      {/* Optional: Global Matchmaking (if needed) */}
-      <div className="mt-8 flex justify-center">
-        <OptionCardComponent
-          Icon={Globe}
-          label="Global Matchmaking"
-          onClick={() => navigate('/game/global')}
-        />
-      </div>
+        <div className="space-y-6">
+          {/* Private Room Card */}
+          <div className="bg-slate-700 p-6 rounded-xl">
+            <PrivateRoomFormComponent
+              onCreate={() => console.log('create room logic')}
+              onJoin={(code) => console.log('join room', code)}
+            />
+          </div>
+        </div>
+      </motion.div>
     </div>
   )
 }
