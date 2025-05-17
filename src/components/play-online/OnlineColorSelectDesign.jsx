@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import pickColorOnline from '../../assets/pick-color.png'
+import pickColorOnline from '../../assets/pick-token-color.png'
 
 const colors = [
   { name: 'Red',    bg: 'bg-red-500'    },

@@ -1,9 +1,9 @@
-import storage from 'redux-persist/lib/storage';
+import storage from 'redux-persist/lib/storage'
 
 const userPersistConfig = {
-  key: 'user', 
+  key: 'user',
   storage,
-  whitelist: ['user', 'token', 'isAuthenticated'] 
-};
+  whitelist: ['user', 'isAuthenticated' , 'token']
+}
 
-export default userPersistConfig;
+export default userPersistConfig
