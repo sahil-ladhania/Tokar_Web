@@ -1,10 +1,25 @@
 import React from 'react'
 import OnlinePlayerCountDesign from '../components/play-online/OnlinePlayerCountDesign'
 import OnlineColorSelectDesign from '../components/play-online/OnlineColorSelectDesign'
+import { useSelector } from 'react-redux'
 
 const PlayOnlinePage = () => {
-  return <OnlinePlayerCountDesign />
-  // return <OnlineColorSelectDesign />
+  const {step} = useSelector((store) => store.onlineMode);
+
+  return (
+    <>
+      {
+        step === 1 ?
+          <>
+            <OnlinePlayerCountDesign />
+          </>
+          :
+          <>
+            <OnlineColorSelectDesign />
+          </>
+      }
+    </>
+  )
 }
 
 export default PlayOnlinePage
