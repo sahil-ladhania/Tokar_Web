@@ -2,8 +2,8 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import pickColorOnline from '../../assets/pick-token-color.png'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
-import { setChosenTokenColor, setError, setGameSessionId, setIsLoading, setParticipants, setRoomCode } from '../../redux/slices/playOnlineSlice'
+import { setChosenTokenColor, setError, setIsLoading } from '../../redux/slices/playOnlineSlice'
+import socket from '../../socket.js'
 
 const colors = [
   { name: 'Red',    bg: 'bg-red-500'    },
@@ -14,7 +14,6 @@ const colors = [
 
 const OnlineColorSelectDesign = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const {numberOfPlayers} = useSelector((store) => store.onlineMode);
 
   // Handler Functions 
@@ -24,18 +23,11 @@ const OnlineColorSelectDesign = () => {
       dispatch(setChosenTokenColor(color));
       dispatch(setError(null));
 
-      const response = await createGameSession({ // earlier in computer mode i created this a rest api using axios , post req
-        numberOfPlayers,
-        choseTokenColor: color
-      });
-      if(response){
-        dispatch(setRoomCode());
-        dispatch(setGameSessionId());
-        dispatch(setParticipants());
-        setTimeout(() => {
-          navigate(`/lobby/1`); // change with dynamic roomcode
-        }, 1000);
-      }
+      socket.emit("join-matchmaking" , {
+        totalPlayers : numberOfPlayers,
+        preferredColor : color
+      })
+
       dispatch(setIsLoading(false));
     }
     catch (error) {
