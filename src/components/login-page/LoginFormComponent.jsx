@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema } from '../../utils/DataValidation';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { authFail, authStart, authSuccess } from '../../redux/slices/userSlice';
+import { authFail, authStart, authSuccess, setToken } from '../../redux/slices/userSlice';
 import { FormInput } from '../common/FormInputComponent.jsx';
 import { login } from '../../services/authServices';
 
@@ -21,6 +21,7 @@ const LoginFormComponent = () => {
       dispatch(authStart());
       const response = await login({formData});
       dispatch(authSuccess(response));
+      dispatch(setToken(response.token));
       setTimeout(() => {
         navigate('/');
       }, 1000);

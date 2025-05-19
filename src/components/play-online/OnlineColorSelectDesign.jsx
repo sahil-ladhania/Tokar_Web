@@ -15,6 +15,7 @@ const colors = [
 const OnlineColorSelectDesign = () => {
   const dispatch = useDispatch();
   const {numberOfPlayers} = useSelector((store) => store.onlineMode);
+  const {token} = useSelector((store) => store.user);
 
   // Handler Functions 
   const handleChooseTokenColor = async(color) => {
@@ -25,8 +26,9 @@ const OnlineColorSelectDesign = () => {
 
       socket.emit("join-matchmaking" , {
         totalPlayers : numberOfPlayers,
-        preferredColor : color
-      })
+        preferredColor : color,
+        token
+      });
 
       dispatch(setIsLoading(false));
     }
