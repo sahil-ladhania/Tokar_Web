@@ -6,10 +6,10 @@ import { setChosenTokenColor, setError, setIsLoading } from '../../redux/slices/
 import socket from '../../socket.js'
 
 const colors = [
-  { name: 'Red',    bg: 'bg-red-500'    },
-  { name: 'Green',  bg: 'bg-green-500'  },
-  { name: 'Yellow', bg: 'bg-yellow-500' },
-  { name: 'Blue',   bg: 'bg-blue-500'   },
+  { name: 'red',    bg: 'bg-red-500'    },
+  { name: 'green',  bg: 'bg-green-500'  },
+  { name: 'yellow', bg: 'bg-yellow-500' },
+  { name: 'blue',   bg: 'bg-blue-500'   },
 ]
 
 const OnlineColorSelectDesign = () => {
@@ -24,8 +24,9 @@ const OnlineColorSelectDesign = () => {
       dispatch(setChosenTokenColor(color));
       dispatch(setError(null));
 
+      console.log("Emiting the Event Join Matchmaking ....");
       socket.emit("join-matchmaking" , {
-        totalPlayers : numberOfPlayers,
+        totalPlayers : Number(numberOfPlayers),
         preferredColor : color,
         token
       });

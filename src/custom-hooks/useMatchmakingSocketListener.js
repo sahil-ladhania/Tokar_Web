@@ -19,7 +19,8 @@ export const useMatchmakingSocketListener = (step) => {
           navigate(`/lobby/${roomCode}`);
       }
 
-        socket.on("match-found" , handleMatchFound);
+      socket.on("match-found" , handleMatchFound);
+
       return () => {
         socket.off("match-found" , handleMatchFound);
       }
