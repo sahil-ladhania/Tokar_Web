@@ -17,7 +17,7 @@ const HomePage = () => {
     navigate('/play/online');
   }
   const handlePlayWithFriends = () => {
-    navigate('/matchmaking')
+    navigate('/play/friends')
   }
 
   return (

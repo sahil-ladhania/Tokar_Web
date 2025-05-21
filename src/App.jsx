@@ -7,7 +7,6 @@ import LoginPage from "./pages/LoginPage.jsx";
 import SignupPage from "./pages/SignupPage.jsx";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage.jsx";
 import ChangePasswordPage from "./pages/ChangePasswordPage.jsx";
-import MatchMakingPage from "./pages/MatchMakingPage.jsx";
 import LobbyPage from "./pages/LobbyPage.jsx";
 import GamePage from "./pages/GamePage.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
@@ -16,6 +15,7 @@ import Layout from './components/Layout.jsx';
 import ResetPasswordPage from './pages/ResetPasswordPage.jsx';
 import PlayComputerPage from './pages/PlayComputerPage.jsx';
 import PlayOnlinePage from './pages/PlayOnlinePage.jsx';
+import PlayWithFriendsPage from './pages/PlayWithFriendsPage.jsx';
 import { useEffect } from 'react';
 import socket from './socket.js';
 
@@ -44,7 +44,7 @@ function App() {
           <Route path="/change-password" element={<ChangePasswordPage />} />
           <Route path="/play/computer" element={<PlayComputerPage />} />
           <Route path="/play/online" element={<PlayOnlinePage />} />
-          <Route path="/matchmaking" element={<MatchMakingPage />} />
+          <Route path="/play/friends" element={<PlayWithFriendsPage />} />
           <Route path="/lobby/:roomCode" element={<LobbyPage />} />
           <Route path="/profile" element={<ProfilePage />} />
         </Route>
