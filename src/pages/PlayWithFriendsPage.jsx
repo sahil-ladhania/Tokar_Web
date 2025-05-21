@@ -5,10 +5,6 @@ import CreateInviteComponent from '../components/play-friends/CreateInviteCompon
 
 
 const PlayWithFriendsPage = () => {
-  
-  const handleJoin = (code) => console.log('Joining room', code)
-  const handleCreate = (code) => console.log('Created room', code)
-
   return (
     <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
       <motion.div
@@ -20,8 +16,8 @@ const PlayWithFriendsPage = () => {
           visible: { transition: { staggerChildren: 0.2 } }
         }}
       >
-        <JoinInviteComponent onJoin={handleJoin} />
-        <CreateInviteComponent onCreate={handleCreate} />
+        <JoinInviteComponent />
+        <CreateInviteComponent/>
       </motion.div>
     </div>
   )

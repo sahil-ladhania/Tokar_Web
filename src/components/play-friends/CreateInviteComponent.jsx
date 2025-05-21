@@ -1,8 +1,10 @@
-// src/components/play-with-friends/CreateInviteComponent.jsx
-import React, { useState } from 'react'
+import React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { User, Copy } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { useDispatch, useSelector } from 'react-redux'
+import { setChosenTokenColor, setError, setIsLoading, setNumberOfPlayers, setStep } from '../../redux/slices/playFriendsSlice'
+import socket from '../../socket.js'
 
 const colors = [
   { name: 'red',    value: 'red',    bg: 'bg-red-500' },
@@ -16,18 +18,45 @@ const stepVariants = {
   visible: { opacity: 1, y: 0 },
 }
 
-const CreateInviteComponent = ({ onCreate }) => {
-  const [step, setStep] = useState(0)           // 0=show “Create Room” btn
-  const [playerCount, setPlayerCount] = useState(null)
-  const [color, setColor] = useState(null)
-  const [code, setCode] = useState('')
+const CreateInviteComponent = () => {
+  const dispatch = useDispatch();
+  const {step , numberOfPlayers , choseTokenColor} = useSelector((store) => store.friendsMode);
+  const {token} = useSelector((store) => store.user);
 
-  // dummy code generation
-  const generateCode = () => {
-    const invite = 'ABCD-' + Math.floor(Math.random() * 9000 + 1000)
-    setCode(invite)
-    setStep(3)
+  // Handler Functions
+  const handleCreateRoom = () => {
+    dispatch(setStep(1));
   }
+
+  const handleChooseNumberOfPlayers = (playersCount) => {
+    dispatch(setStep(2));
+    dispatch(setNumberOfPlayers(playersCount));
+  }
+
+  const handleChooseTokenColor = (tokenColor) => {
+    dispatch(setChosenTokenColor(tokenColor));
+  }
+  
+  const handleGenerateInviteCode = async() => {
+    try {
+      dispatch(setStep(3));
+      dispatch(setIsLoading(true));
+
+      socket.emit("create-private-game-session" , {
+        totalPlayers : Number(numberOfPlayers),
+        preferredColor : choseTokenColor,
+        token
+      });
+      console.log("Game Session Event Triggered ..."); 
+      
+      dispatch(setIsLoading(false));
+    }
+    catch (error) {
+      console.log(error);
+      dispatch(setError(error.message));
+      dispatch(setIsLoading(false));
+    }
+  };
 
   return (
     <motion.div
@@ -37,7 +66,7 @@ const CreateInviteComponent = ({ onCreate }) => {
       variants={stepVariants}
       transition={{ duration: 0.6 }}
     >
-      {/* STEP 0: initial “Create Room” */}
+      {/* STEP 0: Initial “Create Room” */}
       <AnimatePresence exitBeforeEnter>
         {step === 0 && (
           <motion.div
@@ -51,7 +80,7 @@ const CreateInviteComponent = ({ onCreate }) => {
             <Button
               variant="default"
               className="bg-emerald-500 hover:bg-emerald-600"
-              onClick={() => setStep(1)}
+              onClick={handleCreateRoom}
             >
               Create Room
             </Button>
@@ -73,13 +102,10 @@ const CreateInviteComponent = ({ onCreate }) => {
                   key={n}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={() => {
-                    setPlayerCount(n)
-                    setStep(2)
-                  }}
+                  onClick={() => handleChooseNumberOfPlayers(n)}
                   className={`flex items-center justify-center space-x-2 
                     py-3 rounded-lg text-white font-semibold
-                    ${playerCount === n ? 'bg-emerald-500' : 'bg-slate-700 hover:bg-slate-600'}`}
+                    ${numberOfPlayers === n ? 'bg-emerald-500' : 'bg-slate-700 hover:bg-slate-600'}`}
                 >
                   <div className="flex space-x-2">
                     {Array(n).fill(0).map((_, i) => (
@@ -108,9 +134,9 @@ const CreateInviteComponent = ({ onCreate }) => {
                   key={c.value}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => setColor(c.value)}
+                  onClick={() => handleChooseTokenColor(c.value)}
                   className={`flex flex-col items-center space-y-2 p-4 rounded-lg cursor-pointer
-                    ${color === c.value ? 'bg-emerald-500' : 'bg-slate-700 hover:bg-slate-600'}`}
+                    ${choseTokenColor === c.value ? 'bg-emerald-500' : 'bg-slate-700 hover:bg-slate-600'}`}
                 >
                   <div className={`${c.bg} w-10 h-10 rounded-full border-2 border-white`} />
                   <span className="text-white font-medium">{c.name}</span>
@@ -120,8 +146,8 @@ const CreateInviteComponent = ({ onCreate }) => {
             <Button
               variant="default"
               className="w-full mt-4 bg-emerald-500 hover:bg-emerald-600"
-              onClick={generateCode}
-              disabled={!color}
+              onClick={handleGenerateInviteCode}
+              disabled={!choseTokenColor}
             >
               Generate Invite Code
             </Button>
@@ -135,9 +161,9 @@ const CreateInviteComponent = ({ onCreate }) => {
             variants={stepVariants}
             className="bg-slate-700 p-6 rounded-lg flex items-center justify-between"
           >
-            <span className="text-xl font-mono text-white">{code}</span>
+            <span className="text-xl font-mono text-white">JNJNH</span>
             <button
-              onClick={() => navigator.clipboard.writeText(code)}
+              onClick={() => navigator.clipboard.writeText("NJDNHD")}
               className="p-2 rounded bg-slate-600 hover:bg-slate-500"
             >
               <Copy size={20} className="text-white" />
