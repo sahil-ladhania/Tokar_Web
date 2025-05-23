@@ -1,11 +1,42 @@
-// src/components/play-with-friends/JoinInviteComponent.jsx
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { useDispatch, useSelector } from 'react-redux'
+import socket from '../../socket.js'
+import { setError, setIsLoading } from '../../redux/slices/playFriendsSlice'
 
-const JoinInviteComponent = ({ onJoin }) => {
+const JoinInviteComponent = () => {
+  const dispatch = useDispatch();
+  const {token} = useSelector((store) => store.user);
+
+  // State Variables
   const [code, setCode] = useState('')
+
+  // Handler Functions
+  const handleRoomCodeChange = (e) => {
+    const value = e.target.value;
+    setCode(value);
+  }
+
+  const handleJoinFriendsRoom = async() => {
+    try {
+      dispatch(setIsLoading(true));
+
+      socket.emit("join-friends-room" , {
+        roomCode : code,
+        token : token
+      });
+      console.log("Joined Friends Room ..."); 
+
+      dispatch(setIsLoading(false));
+    }
+    catch (error) {
+      console.log(error);
+      dispatch(setError(error.message));
+      dispatch(setIsLoading(false));  
+    }
+  };
 
   return (
     <motion.div
@@ -18,14 +49,13 @@ const JoinInviteComponent = ({ onJoin }) => {
       <Input
         placeholder="Enter invite code"
         value={code}
-        onChange={(e) => setCode(e.target.value.toUpperCase())}
+        onChange={handleRoomCodeChange}
         className="bg-slate-700 text-white"
       />
       <Button
         variant="default"
         className="w-full"
-        disabled={!code}
-        onClick={() => onJoin(code)}
+        onClick={handleJoinFriendsRoom}
       >
         Join Game
       </Button>

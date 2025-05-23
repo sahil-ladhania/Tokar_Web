@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { User, Copy } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -20,10 +20,21 @@ const stepVariants = {
 
 const CreateInviteComponent = () => {
   const dispatch = useDispatch();
-  const {step , numberOfPlayers , choseTokenColor} = useSelector((store) => store.friendsMode);
+  const {step , numberOfPlayers , choseTokenColor , roomCode} = useSelector((store) => store.friendsMode);
   const {token} = useSelector((store) => store.user);
 
+  // State Variables
+  const [copied , setCopied] = useState(false);
+
   // Handler Functions
+  const copyRoomCode = (roomCode) => {
+    navigator.clipboard.writeText(roomCode);
+    setCopied(true);
+    setTimeout(() => {
+      setCopied(false)
+    }, 2000)
+  };
+
   const handleCreateRoom = () => {
     dispatch(setStep(1));
   }
@@ -42,7 +53,7 @@ const CreateInviteComponent = () => {
       dispatch(setStep(3));
       dispatch(setIsLoading(true));
 
-      socket.emit("create-private-game-session" , {
+      socket.emit("create-friends-room" , {
         totalPlayers : Number(numberOfPlayers),
         preferredColor : choseTokenColor,
         token
@@ -159,17 +170,26 @@ const CreateInviteComponent = () => {
           <motion.div
             key="step3"
             variants={stepVariants}
-            className="bg-slate-700 p-6 rounded-lg flex items-center justify-between"
+            className="relative bg-slate-700 p-6 rounded-lg flex items-center justify-between"
           >
-            <span className="text-xl font-mono text-white">JNJNH</span>
+            <span className="text-lg font-mono text-white px-4">{roomCode}</span>
             <button
-              onClick={() => navigator.clipboard.writeText("NJDNHD")}
+              onClick={() => copyRoomCode(roomCode)}
               className="p-2 rounded bg-slate-600 hover:bg-slate-500"
             >
               <Copy size={20} className="text-white" />
             </button>
+
+            {copied && (
+              <div className="absolute bottom-0 right-2 bg-emerald-600 text-white text-xs px-2 py-1 rounded">
+                Copied!
+              </div>
+            )}
           </motion.div>
         )}
+        <div>
+          <h1 className='text-emerald-400'>Copy and Paste the above Code to Join Friends Room !!!</h1>
+        </div>
       </AnimatePresence>
     </motion.div>
   )

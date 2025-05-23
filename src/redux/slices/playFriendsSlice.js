@@ -6,7 +6,9 @@ const initialState = {
     choseTokenColor : "",
     roomCode : null,
     gameSessionId : null,
-    participants : null,
+    hostParticipant : null,
+    myParticipant : null,
+    remainingParticipants : [],
     loading: false,         
     error: null
 }
@@ -36,8 +38,14 @@ const playFriendsSlice = createSlice({
         setGameSessionId : (state , action) => {
             state.gameSessionId = action.payload;
         },
-        setParticipants : (state , action) => {
-            state.participants = action.payload;
+        setHostParticipant : (state , action) => {
+            state.hostParticipant = action.payload;
+        },
+        setMyParticipant : (state , action) => {
+            state.myParticipant = action.payload;
+        },
+        setRemainingParticipants : (state , action) => {
+            state.remainingParticipants = [...state.remainingParticipants , action.payload];
         },
     }
 });
@@ -50,7 +58,9 @@ export const {
     setChosenTokenColor,
     setRoomCode,
     setGameSessionId,
-    setParticipants
+    setHostParticipant,
+    setMyParticipant,
+    setRemainingParticipants
 } = playFriendsSlice.actions;
 
 export default playFriendsSlice.reducer;
