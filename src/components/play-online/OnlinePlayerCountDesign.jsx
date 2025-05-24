@@ -63,8 +63,9 @@ const OnlinePlayerCountDesign = () => {
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             className="bg-slate-800 hover:bg-slate-700 transition rounded-lg py-6 text-xl font-semibold flex flex-col items-center space-y-2"
+            onClick={() => handleChooseNumberOfPlayers(2)}
           >
-            <div onClick={() => handleChooseNumberOfPlayers(2)} className="flex space-x-4">
+            <div className="flex space-x-4">
               <User size={24} className="text-white" />
               <User size={24} className="text-white" />
             </div>
@@ -75,8 +76,9 @@ const OnlinePlayerCountDesign = () => {
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             className="bg-slate-800 hover:bg-slate-700 transition rounded-lg py-6 text-xl font-semibold flex flex-col items-center space-y-2"
+            onClick={() => handleChooseNumberOfPlayers(4)}
           >
-            <div onClick={() => handleChooseNumberOfPlayers(4)} className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-4">
               <User size={24} className="text-white" />
               <User size={24} className="text-white" />
               <User size={24} className="text-white" />

@@ -2,9 +2,10 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import picktokencolor from '../../assets/pick-token-color.png'
 import { useDispatch, useSelector } from 'react-redux';
-import { setChosenTokenColor, setError, setGameSessionId, setIsLoading, setParticipants, setRoomCode } from '../../redux/slices/playComputerSlice';
+import { setChosenTokenColor, setError, setGameSessionId, setIsLoading, setNumberOfPlayers, setParticipants, setRoomCode, setStep } from '../../redux/slices/playComputerSlice';
 import { useNavigate } from 'react-router-dom';
 import { createGameSession } from '../../services/computerModeServices';
+import {toast} from 'sonner';
 
 const colors = [
   { name: 'Red',    value: 'red',    bg: 'bg-red-500' },
@@ -30,6 +31,7 @@ const ColorSelectDesign = () => {
         choseTokenColor: color
       });
       if(response.data){
+        toast.success("Successfully Created a Game Session !!!");
         dispatch(setRoomCode(response.data.gameSessionData.roomCode));
         dispatch(setGameSessionId(response.data.gameSessionData.gameSessionId));
         dispatch(setParticipants(response.data.gameSessionData.participants));
@@ -37,10 +39,19 @@ const ColorSelectDesign = () => {
           navigate(`/lobby/${response.data.gameSessionData.roomCode}`);
         }, 1000);
       }
+      setTimeout(() => {
+        dispatch(setStep(1));
+        dispatch(setNumberOfPlayers(null));
+        dispatch(dispatch(setChosenTokenColor("")));
+      }, 2000);
       dispatch(setIsLoading(false));
     }
     catch (error) {
       console.log(error);
+      toast.error(error.message);
+      dispatch(setStep(1));
+      dispatch(setNumberOfPlayers(null));
+      dispatch(dispatch(setChosenTokenColor("")));
       dispatch(setError(error.message));
       dispatch(setIsLoading(false));
     }

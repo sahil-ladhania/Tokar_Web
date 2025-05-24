@@ -3,10 +3,11 @@ import OnlinePlayerCountDesign from '../components/play-online/OnlinePlayerCount
 import OnlineColorSelectDesign from '../components/play-online/OnlineColorSelectDesign'
 import { useSelector } from 'react-redux'
 import {useMatchmakingSocketListener} from '../custom-hooks/useMatchmakingSocketListener.js';
+import { useSocketErrorHandler } from '../custom-hooks/useSocketErrorHandler.js';
 
 const PlayOnlinePage = () => {
   const {step} = useSelector((store) => store.onlineMode);
-
+  useSocketErrorHandler();
   useMatchmakingSocketListener(step);
 
   return (

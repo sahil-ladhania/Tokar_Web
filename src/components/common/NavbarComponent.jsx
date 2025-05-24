@@ -5,8 +5,9 @@ import {DropdownMenu,DropdownMenuTrigger,DropdownMenuContent,DropdownMenuItem} f
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import tokar from "../../assets/Tokar.png"
 import { useDispatch, useSelector } from "react-redux"
-import { authFail, authStart, logoutSuccess } from "../../redux/slices/userSlice"
+import { authFail, authStart, logoutSuccess, setToken } from "../../redux/slices/userSlice"
 import { logout } from "../../services/authServices"
+import { toast } from "sonner"
 
 const NavbarComponent = () => {
   const { user , isAuthenticated} = useSelector((store) => store.user);
@@ -23,6 +24,8 @@ const NavbarComponent = () => {
       dispatch(authStart());
       const response = await logout();
       dispatch(logoutSuccess());
+      toast.success("Successfully Logged Out !!!");
+      dispatch(setToken(null));
       setTimeout(() => {
         navigate('/');
       }, 1000);

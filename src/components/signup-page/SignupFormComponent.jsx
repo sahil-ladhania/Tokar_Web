@@ -9,6 +9,7 @@ import { authFail, authStart } from '../../redux/slices/userSlice.js';
 import { signup } from '../../services/authServices.js';
 import { FormInput } from '../common/FormInputComponent.jsx';
 import { useNavigate } from 'react-router-dom';
+import {toast} from 'sonner';
 
 const SignupFormComponent = () => {
   const dispatch = useDispatch();
@@ -21,12 +22,14 @@ const SignupFormComponent = () => {
       dispatch(authStart());
       const response = await signup({formData});
       setTimeout(() => {
+        toast.success("Successfully Signed Up !!!");
         navigate('/login');
       }, 1000);
       reset();
     }
     catch (error) {
       console.log("Signup Failed : " , error.message);
+      toast.error(error.message);
       dispatch(authFail(error.message));
     }
   }

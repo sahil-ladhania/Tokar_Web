@@ -24,8 +24,8 @@ export const playComputerSlice = createSlice({
         setNumberOfPlayers : (state , action) => {
             state.numberOfPlayers = action.payload;
         },
-        setStep : (state) => {
-            state.step =  2;
+        setStep : (state , action) => {
+            state.step =  action.payload;
         },
         setChosenTokenColor : (state , action) => {
             state.choseTokenColor = action.payload;

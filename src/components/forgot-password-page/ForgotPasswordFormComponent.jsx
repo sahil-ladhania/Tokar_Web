@@ -9,6 +9,7 @@ import { forgotPasswordSchema } from '../../utils/DataValidation';
 import { FormInput } from '../common/FormInputComponent';
 import { authFail, authStart, authSuccess } from '../../redux/slices/userSlice';
 import { forgotPassword } from '../../services/authServices';
+import {toast} from 'sonner';
 
 const ForgotPasswordFormComponent = () => {
   const dispatch = useDispatch();
@@ -20,10 +21,12 @@ const ForgotPasswordFormComponent = () => {
     try {
       dispatch(authStart());
       const response = await forgotPassword({formData});
+      toast.success("Successfully Sent the Reset Link to your Registered Email !!!");
       reset();
     }
     catch (error) {
       console.log("Error Sending Email To User : " , error.message);
+      toast.error(error.message);
       dispatch(authFail(error.message));
     }
   }

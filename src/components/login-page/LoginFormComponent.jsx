@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { authFail, authStart, authSuccess, setToken } from '../../redux/slices/userSlice';
 import { FormInput } from '../common/FormInputComponent.jsx';
 import { login } from '../../services/authServices';
+import {toast} from 'sonner';
 
 const LoginFormComponent = () => {
   const dispatch = useDispatch();
@@ -23,12 +24,14 @@ const LoginFormComponent = () => {
       dispatch(authSuccess(response));
       dispatch(setToken(response.token));
       setTimeout(() => {
+        toast.success("Successfully Logged In !!!");
         navigate('/');
       }, 1000);
       reset();
     }
     catch (error) {
       console.log("Error Logging In : " , error.message);
+      toast.error(error.message);
       dispatch(authFail(error.message));
     }
   }

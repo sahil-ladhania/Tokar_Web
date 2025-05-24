@@ -5,13 +5,14 @@ import { Button } from '@/components/ui/button'
 import { useDispatch, useSelector } from 'react-redux'
 import socket from '../../socket.js'
 import { setError, setIsLoading } from '../../redux/slices/playFriendsSlice'
+import {toast} from 'sonner';
 
 const JoinInviteComponent = () => {
   const dispatch = useDispatch();
   const {token} = useSelector((store) => store.user);
 
   // State Variables
-  const [code, setCode] = useState('')
+  const [code, setCode] = useState('');
 
   // Handler Functions
   const handleRoomCodeChange = (e) => {
@@ -27,12 +28,14 @@ const JoinInviteComponent = () => {
         roomCode : code,
         token : token
       });
-      console.log("Joined Friends Room ..."); 
+      toast.success("Successfully Joined the Private Game Session !!!");
+      setCode("");
 
       dispatch(setIsLoading(false));
     }
     catch (error) {
       console.log(error);
+      toast.error(error.message);
       dispatch(setError(error.message));
       dispatch(setIsLoading(false));  
     }

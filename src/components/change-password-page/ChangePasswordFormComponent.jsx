@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { authFail, authStart } from '../../redux/slices/userSlice';
 import { changePassword } from '../../services/authServices';
+import {toast} from 'sonner';
 
 const ChangePasswordFormComponent = () => {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ const ChangePasswordFormComponent = () => {
       dispatch(authStart());
 
       const response = await changePassword({formData});
+      toast.success("Successfully Changed Password !!!");
       console.log(response);
 
       setTimeout(() => {
@@ -29,6 +31,7 @@ const ChangePasswordFormComponent = () => {
     }
     catch (error) {
       console.log("Error Changing Password : " , error.message);
+      toast.error(error.message);
       dispatch(authFail(error.message));
     }
   }

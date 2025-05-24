@@ -18,6 +18,7 @@ import PlayOnlinePage from './pages/PlayOnlinePage.jsx';
 import PlayWithFriendsPage from './pages/PlayWithFriendsPage.jsx';
 import { useEffect } from 'react';
 import socket from './socket.js';
+import { Toaster } from 'sonner';
 
 function App() {
 
@@ -31,6 +32,7 @@ function App() {
   
   return (
     <Router>
+      <Toaster richColors position='bottom-right'/>
       <Routes>
         {/* Routes using the Layout (with Navbar + Footer) */}
         <Route element={<Layout />}>

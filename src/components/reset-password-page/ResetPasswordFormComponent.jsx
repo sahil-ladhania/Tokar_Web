@@ -10,6 +10,7 @@ import { resetPasswordSchema } from '../../utils/DataValidation'
 import { resetPassword } from '../../services/authServices';
 import { authFail, authStart } from '../../redux/slices/userSlice';
 import { FormInput } from '../common/FormInputComponent';
+import {toast} from 'sonner';
 
 const ResetPasswordFormComponent = () => {
   const dispatch = useDispatch();
@@ -24,6 +25,7 @@ const ResetPasswordFormComponent = () => {
       dispatch(authStart());
 
       const response = await resetPassword({token , formData});
+      toast.success("Successfully Reset Your Password !!!");
       console.log(response);
 
       setTimeout(() => {
@@ -33,6 +35,7 @@ const ResetPasswordFormComponent = () => {
     }
     catch (error) {
       console.log("Signup Failed : " , error.message);
+      toast.error(error.message);
       dispatch(authFail(error.message));
     }
   };

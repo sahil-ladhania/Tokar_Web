@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { useDispatch, useSelector } from 'react-redux'
 import { setChosenTokenColor, setError, setIsLoading, setNumberOfPlayers, setStep } from '../../redux/slices/playFriendsSlice'
 import socket from '../../socket.js'
+import {toast} from 'sonner';
 
 const colors = [
   { name: 'red',    value: 'red',    bg: 'bg-red-500' },
@@ -28,11 +29,14 @@ const CreateInviteComponent = () => {
 
   // Handler Functions
   const copyRoomCode = (roomCode) => {
-    navigator.clipboard.writeText(roomCode);
-    setCopied(true);
-    setTimeout(() => {
-      setCopied(false)
-    }, 2000)
+    if(roomCode !== null){
+      navigator.clipboard.writeText(roomCode);
+      setCopied(true);
+      toast.success("Room Code Copied to Clipboard !!!");
+      setTimeout(() => {
+        setCopied(false)
+      }, 2000)
+    }
   };
 
   const handleCreateRoom = () => {
@@ -58,12 +62,12 @@ const CreateInviteComponent = () => {
         preferredColor : choseTokenColor,
         token
       });
-      console.log("Game Session Event Triggered ..."); 
       
       dispatch(setIsLoading(false));
     }
     catch (error) {
       console.log(error);
+      toast.error(error.message);
       dispatch(setError(error.message));
       dispatch(setIsLoading(false));
     }
@@ -187,9 +191,14 @@ const CreateInviteComponent = () => {
             )}
           </motion.div>
         )}
-        <div>
-          <h1 className='text-emerald-400'>Copy and Paste the above Code to Join Friends Room !!!</h1>
-        </div>
+        {
+          roomCode !== null ?
+            <div>
+              <h1 className='text-emerald-400'>Copy and Paste the above Code to Join Friends Room !!!</h1>
+            </div>
+            :
+            null
+        }
       </AnimatePresence>
     </motion.div>
   )

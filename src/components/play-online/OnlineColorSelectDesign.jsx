@@ -2,8 +2,9 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import pickColorOnline from '../../assets/pick-token-color.png'
 import { useDispatch, useSelector } from 'react-redux'
-import { setChosenTokenColor, setError, setIsLoading } from '../../redux/slices/playOnlineSlice'
+import { setChosenTokenColor, setError, setIsLoading, setNumberOfPlayers, setStep } from '../../redux/slices/playOnlineSlice'
 import socket from '../../socket.js'
+import {toast} from 'sonner';
 
 const colors = [
   { name: 'red',    bg: 'bg-red-500'    },
@@ -30,11 +31,16 @@ const OnlineColorSelectDesign = () => {
         preferredColor : color,
         token
       });
+      toast.success("Successfully Joined the Matchmaking Queue !!!");
 
       dispatch(setIsLoading(false));
     }
     catch (error) {
       console.log(error);
+      toast.error(error.message);
+      dispatch(setStep(1));
+      dispatch(setNumberOfPlayers(null));
+      dispatch(setChosenTokenColor(""));
       dispatch(setError(error.message));
       dispatch(setIsLoading(false));
     }
